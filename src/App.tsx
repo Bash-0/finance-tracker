@@ -1,15 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import './App.css'
 import Header from './components/header'
 import type { Expense } from './types/Expense'
 import ExpenseForm from "./components/ExpenseForm";
+import ExpenseList from "./components/ExpenseList";
 
 function App() {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("Food");
 
-  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [expenses, setExpenses] = useState<Expense[]>(() => {
+    // load the expenses data back in from local storage
+    const savedExpenses = localStorage.getItem("expenses");
+
+    if (savedExpenses) {
+      return JSON.parse(savedExpenses);
+    }
+
+    return [];
+  });
+  
+  // saves expenses into local storage
+  useEffect(() => {
+    localStorage.setItem(
+      "expenses",
+      JSON.stringify(expenses)
+    );
+  }, [expenses]);
+
 
   return (
     <main>
@@ -41,13 +60,16 @@ function App() {
         }}
       />
 
-      <ul>
-        {expenses.map((expense) => (
-          <li key={expense.id}>
-            {expense.description} - £{expense.amount}
-          </li>
-        ))}
-      </ul>
+      <ExpenseList
+        expenses={expenses}
+        onDeleteExpense={(id) => {
+          setExpenses(
+            expenses.filter(
+              (expense) => expense.id !== id
+            )
+          );
+        }}
+      />
     </main>
   );
 }
