@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import './App.css'
 import Header from './components/header'
 import type { Expense } from './types/Expense'
 import ExpenseForm from "./components/ExpenseForm";
@@ -31,45 +30,47 @@ function App() {
 
 
   return (
-    <main>
-      <Header title = "Smart Finance Tracker" />
+    <main className="min-h-screen bg-gray-100 py-10">
+      <div className="mx-auto max-w-4xl px-6">
+        <Header title = "Smart Finance Tracker" />
 
-      <ExpenseForm
-        description={description}
-        amount={amount}
-        category={category}
-        setDescription={setDescription}
-        setAmount={setAmount}
-        setCategory={setCategory}
-        onAddExpense={() => {
-          if (!description || !amount) return;
+        <ExpenseForm
+          description={description}
+          amount={amount}
+          category={category}
+          setDescription={setDescription}
+          setAmount={setAmount}
+          setCategory={setCategory}
+          onAddExpense={() => {
+            if (!description || !amount) return;
 
-          const newExpense: Expense = {
-            id: crypto.randomUUID(),
-            description,
-            amount: Number(amount),
-            category,
-            date: new Date().toISOString(),
-          };
+            const newExpense: Expense = {
+              id: crypto.randomUUID(),
+              description,
+              amount: Number(amount),
+              category,
+              date: new Date().toISOString(),
+            };
 
-          setExpenses([...expenses, newExpense]);
+            setExpenses([...expenses, newExpense]);
 
-          setDescription("");
-          setAmount("");
-          setCategory("Food");
-        }}
-      />
+            setDescription("");
+            setAmount("");
+            setCategory("Food");
+          }}
+        />
 
-      <ExpenseList
-        expenses={expenses}
-        onDeleteExpense={(id) => {
-          setExpenses(
-            expenses.filter(
-              (expense) => expense.id !== id
-            )
-          );
-        }}
-      />
+        <ExpenseList
+          expenses={expenses}
+          onDeleteExpense={(id) => {
+            setExpenses(
+              expenses.filter(
+                (expense) => expense.id !== id
+              )
+            );
+          }}
+        />
+      </div>
     </main>
   );
 }
