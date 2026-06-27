@@ -28,6 +28,8 @@ function ExpenseForm({
       <div className="grid gap-3 md:grid-cols-2">
         <input className="w-full rounded-lg border border-gray-300 p-3"
           type="number" 
+          min="0.1"
+          step="0.1"
           placeholder="Amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}

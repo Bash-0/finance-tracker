@@ -28,7 +28,30 @@ function App() {
     );
   }, [expenses]);
 
+function handleAddExpense(){
+  // check the form, validation
+  if (!description.trim()) return;
 
+  const parsedAmount = Number(amount);
+
+  if (Number.isNaN(parsedAmount) || parsedAmount <= 0) {
+    return;
+  }
+
+    const newExpense: Expense = {
+      id: crypto.randomUUID(),
+      description,
+      amount: Number(amount),
+      category,
+      date: new Date().toISOString(),
+    };
+
+    setExpenses([...expenses, newExpense]);
+
+    setDescription("");
+    setAmount("");
+    setCategory("Food");
+}
   return (
     <main className="min-h-screen bg-gray-100 py-10">
       <div className="mx-auto max-w-4xl px-6">
@@ -41,23 +64,7 @@ function App() {
           setDescription={setDescription}
           setAmount={setAmount}
           setCategory={setCategory}
-          onAddExpense={() => {
-            if (!description || !amount) return;
-
-            const newExpense: Expense = {
-              id: crypto.randomUUID(),
-              description,
-              amount: Number(amount),
-              category,
-              date: new Date().toISOString(),
-            };
-
-            setExpenses([...expenses, newExpense]);
-
-            setDescription("");
-            setAmount("");
-            setCategory("Food");
-          }}
+          onAddExpense={handleAddExpense}
         />
 
         <ExpenseList
